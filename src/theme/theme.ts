@@ -53,7 +53,10 @@ export const themeOverrides = {
       palette: paletteOptions,
       shadows: ['none', ...shadows],
     },
-    dark: false,
+    dark: {
+      palette: paletteOptions,
+      shadows: ['none', ...shadows],
+    },
   },
   unstable_sxConfig: sxConfig,
   components: {

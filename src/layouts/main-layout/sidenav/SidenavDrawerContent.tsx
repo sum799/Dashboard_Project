@@ -3,6 +3,7 @@ import { Divider, IconButton } from '@mui/material';
 import Box from '@mui/material/Box';
 import List from '@mui/material/List';
 import Toolbar from '@mui/material/Toolbar';
+import { getStoredAuthUser } from 'lib/googleAuth';
 import { useSettingsContext } from 'providers/SettingsProvider';
 import sitemap from 'routes/sitemap';
 import IconifyIcon from 'components/base/IconifyIcon';
@@ -27,11 +28,24 @@ const SidenavDrawerContent = ({ variant = 'permanent' }: SidenavDrawerContentPro
     [sidenavCollapsed],
   );
 
+  const isAuthenticated = !!getStoredAuthUser();
+
   const toggleNavbarDrawer = () => {
     setConfig({
       openNavbarDrawer: !openNavbarDrawer,
     });
   };
+
+  const visibleMenuItems = (menuItems: (typeof sitemap)[number]['items']) =>
+    menuItems.filter((item) => {
+      if (isAuthenticated) {
+        return !['starter', 'error', 'login', 'sign-up', 'documentation', 'multi-level'].includes(
+          item.pathName,
+        );
+      }
+
+      return true;
+    });
 
   return (
     <>
@@ -55,7 +69,7 @@ const SidenavDrawerContent = ({ variant = 'permanent' }: SidenavDrawerContentPro
             },
           ]}
         >
-          <Logo showName={expanded} />
+          <Logo showName={false} />
           <IconButton sx={{ mt: 1, display: { md: 'none' } }} onClick={toggleNavbarDrawer}>
             <IconifyIcon icon="material-symbols:left-panel-close-outline" fontSize={20} />
           </IconButton>
@@ -98,7 +112,7 @@ const SidenavDrawerContent = ({ variant = 'permanent' }: SidenavDrawerContentPro
                       gap: '2px',
                     }}
                   >
-                    {menu.items.map((item) => (
+                    {visibleMenuItems(menu.items).map((item) => (
                       <NavItem key={item.pathName} item={item} level={0} />
                     ))}
                   </List>

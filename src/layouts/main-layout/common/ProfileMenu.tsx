@@ -1,4 +1,4 @@
-import { PropsWithChildren, SyntheticEvent, useState } from 'react';
+import { PropsWithChildren, SyntheticEvent, useEffect, useMemo, useState } from 'react';
 import {
   Box,
   Button,
@@ -9,7 +9,6 @@ import {
   MenuItemProps,
   SnackbarCloseReason,
   Stack,
-  Switch,
   SxProps,
   Typography,
   listClasses,
@@ -18,6 +17,7 @@ import {
 } from '@mui/material';
 import Menu from '@mui/material/Menu';
 import { users } from 'data/users';
+import { clearStoredAuthUser, getStoredAuthUser } from 'lib/googleAuth';
 import paths from 'routes/paths';
 import IconifyIcon from 'components/base/IconifyIcon';
 import StatusAvatar from 'components/base/StatusAvatar';
@@ -27,20 +27,54 @@ interface ProfileMenuItemProps extends MenuItemProps {
   icon: string;
   href?: string;
   sx?: SxProps;
+  disabled?: boolean;
 }
 
-const ProfileMenu = () => {
+const ProfileMenu = ({ disabled = false }: { disabled?: boolean }) => {
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const [isAuthenticated, setIsAuthenticated] = useState(() => !!getStoredAuthUser());
+  const authUser = useMemo(() => {
+    const storedUser = getStoredAuthUser();
+    if (!storedUser) {
+      return null;
+    }
+
+    return {
+      ...(storedUser as Record<string, string | number>),
+      name: String(storedUser.name ?? 'Guest'),
+      email: String(storedUser.email ?? 'guest@mail.com'),
+      avatar: storedUser.avatar ? String(storedUser.avatar) : undefined,
+      designation: storedUser.designation ? String(storedUser.designation) : undefined,
+    };
+  }, [isAuthenticated]);
+
+  const currentUser = authUser || demoUser;
+
+  useEffect(() => {
+    setIsAuthenticated(!!getStoredAuthUser());
+  }, [anchorEl]);
 
   const open = Boolean(anchorEl);
-  const handleClick = (event: React.MouseEvent<HTMLElement>) => setAnchorEl(event.currentTarget);
+  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
+    if (disabled) return;
+    setAnchorEl(event.currentTarget);
+  };
   const handleClose = () => setAnchorEl(null);
 
-  const handleSnackbarOpen = () => setSnackbarOpen(true);
   const handleSnackbarClose = (_event: SyntheticEvent, reason?: SnackbarCloseReason) => {
     if (reason === 'clickaway') return;
     setSnackbarOpen(false);
+  };
+
+  const handleSignOut = () => {
+    clearStoredAuthUser();
+    setIsAuthenticated(false);
+    handleClose();
+
+    if (typeof window !== 'undefined') {
+      window.location.replace(paths.root);
+    }
   };
 
   const menuButton = (
@@ -55,9 +89,9 @@ const ProfileMenu = () => {
       }}
     >
       <StatusAvatar
-        alt={demoUser.name}
+        alt={currentUser.name}
         status="online"
-        src={demoUser.avatar ?? undefined}
+        src={currentUser.avatar ?? undefined}
         sx={{
           width: 40,
           height: 40,
@@ -83,6 +117,17 @@ const ProfileMenu = () => {
           horizontal: 'right',
           vertical: 'bottom',
         }}
+        slotProps={{
+          paper: {
+            sx: {
+              minWidth: 320,
+              backgroundColor: 'background.paper',
+              border: '1px solid',
+              borderColor: 'divider',
+              boxShadow: '0 20px 40px rgba(0,0,0,0.12)',
+            },
+          },
+        }}
         sx={{
           [`& .${paperClasses.root}`]: { minWidth: 320 },
           [`& .${listClasses.root}`]: { py: 0 },
@@ -98,8 +143,8 @@ const ProfileMenu = () => {
         >
           <StatusAvatar
             status="online"
-            alt={demoUser.name}
-            src={demoUser.avatar ?? undefined}
+            alt={currentUser.name}
+            src={currentUser.avatar ?? undefined}
             sx={{ width: 48, height: 48 }}
           />
           <Box>
@@ -110,16 +155,16 @@ const ProfileMenu = () => {
                 mb: 0.5,
               }}
             >
-              {demoUser.name}
+              {currentUser.name}
             </Typography>
-            {demoUser.designation && (
+            {currentUser.designation && (
               <Typography
                 variant="subtitle2"
                 sx={{
                   color: 'warning.main',
                 }}
               >
-                {demoUser.designation}
+                {currentUser.designation}
                 <IconifyIcon
                   icon="material-symbols:diamond-rounded"
                   color="warning.main"
@@ -135,16 +180,12 @@ const ProfileMenu = () => {
             Accessibility
           </ProfileMenuItem>
 
-          <ProfileMenuItem icon="material-symbols:settings-outline-rounded" onClick={handleClose}>
-            Preferences
-          </ProfileMenuItem>
-
           <ProfileMenuItem
-            onClick={handleSnackbarOpen}
-            icon="material-symbols:dark-mode-outline-rounded"
+            icon="material-symbols:settings-outline-rounded"
+            onClick={handleClose}
+            disabled={disabled}
           >
-            Dark mode
-            <Switch checked={false} sx={{ ml: 'auto' }} />
+            Preferences
           </ProfileMenuItem>
         </Box>
         <Divider />
@@ -153,6 +194,7 @@ const ProfileMenu = () => {
             icon="material-symbols:manage-accounts-outline-rounded"
             onClick={handleClose}
             href="#!"
+            disabled={disabled}
           >
             Account Settings
           </ProfileMenuItem>
@@ -160,14 +202,15 @@ const ProfileMenu = () => {
             icon="material-symbols:question-mark-rounded"
             onClick={handleClose}
             href="#!"
+            disabled={disabled}
           >
             Help Center
           </ProfileMenuItem>
         </Box>
         <Divider />
         <Box sx={{ py: 1 }}>
-          {demoUser ? (
-            <ProfileMenuItem onClick={handleClose} icon="material-symbols:logout-rounded">
+          {isAuthenticated ? (
+            <ProfileMenuItem onClick={handleSignOut} icon="material-symbols:logout-rounded">
               Sign Out
             </ProfileMenuItem>
           ) : (
@@ -188,10 +231,11 @@ const ProfileMenuItem = ({
   children,
   href,
   sx,
+  disabled = false,
 }: PropsWithChildren<ProfileMenuItemProps>) => {
   const linkProps = href ? { component: Link, href, underline: 'none' } : {};
   return (
-    <MenuItem onClick={onClick} {...linkProps} sx={{ gap: 1, ...sx }}>
+    <MenuItem onClick={onClick} {...linkProps} disabled={disabled} sx={{ gap: 1, ...sx }}>
       <ListItemIcon
         sx={{
           [`&.${listItemIconClasses.root}`]: { minWidth: 'unset !important' },

@@ -26,6 +26,7 @@ const SettingsProvider = ({ children }: PropsWithChildren) => {
     ...initialConfig,
     sidenavCollapsed: getItemFromStore('sidenavCollapsed', initialConfig.sidenavCollapsed),
     fontFamily: getItemFromStore('fontFamily', initialConfig.fontFamily),
+    darkMode: getItemFromStore('darkMode', initialConfig.darkMode) === 'true',
   };
   const [config, configDispatch] = useReducer(settingsReducer, configState);
 

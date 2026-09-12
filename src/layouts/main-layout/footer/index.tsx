@@ -1,4 +1,4 @@
-import { Divider, Stack, Typography } from '@mui/material';
+import { Divider, Link, Stack, Typography } from '@mui/material';
 
 const Footer = () => {
   return (
@@ -9,40 +9,48 @@ const Footer = () => {
         direction={{ xs: 'column', sm: 'row' }}
         sx={[
           {
-            columnGap: 2,
-            rowGap: 0.5,
+            columnGap: 3,
+            rowGap: 1,
             bgcolor: 'background.default',
             justifyContent: { xs: 'center', sm: 'space-between' },
-            alignItems: 'center',
-            height: { xs: 72, sm: 56 },
-            py: 1,
+            alignItems: { xs: 'center', sm: 'center' },
+            py: 2,
             px: { xs: 3, md: 5 },
             textAlign: { xs: 'center', sm: 'left' },
+            flexWrap: 'wrap',
           },
         ]}
       >
-        <Typography
-          variant="caption"
-          component="p"
-          sx={{
-            lineHeight: 1.6,
-            fontWeight: 'light',
-            color: 'text.secondary',
-          }}
-        >
-          Made by free resource
+        <Typography variant="caption" sx={{ color: 'text.secondary' }}>
+          © 2026 SumK9
         </Typography>
 
-        <Typography
-          variant="caption"
-          component="p"
-          sx={{
-            fontWeight: 'light',
-            color: 'text.secondary',
-          }}
-        >
-          v{import.meta.env.VITE_APP_VERSION}
-        </Typography>
+        <Stack direction={{ xs: 'column', sm: 'row' }} spacing={1.5} alignItems="center">
+          <Link href="mailto:hello@sumk9.com" underline="hover" color="text.secondary">
+            hello@sumk9.com
+          </Link>
+          <Link href="tel:+919876543210" underline="hover" color="text.secondary">
+            +91 98765 43210
+          </Link>
+          <Link
+            href="https://x.com"
+            target="_blank"
+            rel="noreferrer"
+            underline="hover"
+            color="text.secondary"
+          >
+            Twitter
+          </Link>
+          <Link
+            href="https://instagram.com"
+            target="_blank"
+            rel="noreferrer"
+            underline="hover"
+            color="text.secondary"
+          >
+            Instagram
+          </Link>
+        </Stack>
       </Stack>
     </>
   );

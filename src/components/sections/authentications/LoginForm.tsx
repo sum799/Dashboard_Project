@@ -1,29 +1,76 @@
+import { useState } from 'react';
 import { useNavigate } from 'react-router';
 import {
+  Alert,
   Box,
   Button,
   Checkbox,
-  Divider,
   FormControlLabel,
+  Grid,
   Link,
   Stack,
   TextField,
   Typography,
 } from '@mui/material';
-import Grid from '@mui/material/Grid';
-import paths from 'routes/paths';
+import { setStoredAuthUser } from 'lib/googleAuth';
 import PasswordTextField from 'components/common/PasswordTextField';
-import SocialAuth from './SocialAuth';
 
-interface LoginFormProps {
-  defaultCredential?: { email: string; password: string };
-}
-const LoginForm = ({ defaultCredential }: LoginFormProps) => {
+const LoginForm = () => {
   const navigate = useNavigate();
+  const [userId, setUserId] = useState('');
+  const [password, setPassword] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    navigate('/');
+  const handleLoginSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    setErrorMessage('');
+    setIsLoading(true);
+
+    const webAppUrl =
+      'https://script.google.com/macros/s/AKfycbyEMJFP5fb8NRzH6Br9tUX209YagheTUNa8S24cYAAF034L9E6H8pV1xo1IceTqTfg8/exec';
+
+    try {
+      const response = await fetch(webAppUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'text/plain',
+        },
+        body: JSON.stringify({
+          User_ID: userId,
+          Password: password,
+        }),
+      });
+
+      const data = await response.json();
+      console.log('Authentication response received:', data);
+
+      const isUserValid =
+        data?.User_Found === true ||
+        data?.User_Found === 'true' ||
+        data?.User_id === true ||
+        data?.User_id === 'true' ||
+        data?.User_ID === true ||
+        data?.User_ID === 'true';
+
+      if (isUserValid) {
+        setStoredAuthUser({
+          email: userId,
+          name: userId,
+          googleUserId: userId,
+        });
+        navigate('/');
+      } else {
+        setPassword('');
+        setErrorMessage('Invalid User ID or Password credentials. Please try again.');
+      }
+    } catch (error) {
+      console.error('Critical API communication error:', error);
+      setErrorMessage('Network error: Unable to reach verification server.');
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -58,29 +105,11 @@ const LoginForm = ({ defaultCredential }: LoginFormProps) => {
             }}
           >
             <Typography variant="h4">Log in</Typography>
-            <Typography
-              variant="subtitle2"
-              sx={{
-                color: 'text.secondary',
-              }}
-            >
-              Don&apos;t have an account?
-              <Link href={paths.signup} sx={{ ml: 1 }}>
-                Sign up
-              </Link>
-            </Typography>
           </Stack>
         </Grid>
 
         <Grid size={12}>
-          <SocialAuth />
-        </Grid>
-        <Grid size={12}>
-          <Divider sx={{ color: 'text.secondary' }}>or use email</Divider>
-        </Grid>
-
-        <Grid size={12}>
-          <Box component="form" noValidate onSubmit={handleSubmit}>
+          <Box component="form" noValidate onSubmit={handleLoginSubmit}>
             <Grid container>
               <Grid
                 sx={{
@@ -91,12 +120,16 @@ const LoginForm = ({ defaultCredential }: LoginFormProps) => {
                 <TextField
                   fullWidth
                   size="large"
-                  id="email"
-                  type="email"
-                  label="Email"
-                  defaultValue={defaultCredential?.email}
+                  id="userId"
+                  type="text"
+                  label="User ID"
+                  value={userId}
+                  onChange={(e) => setUserId(e.target.value)}
+                  disabled={isLoading}
+                  required
                 />
               </Grid>
+
               <Grid
                 sx={{
                   mb: 2.5,
@@ -108,9 +141,21 @@ const LoginForm = ({ defaultCredential }: LoginFormProps) => {
                   size="large"
                   id="password"
                   label="Password"
-                  defaultValue={defaultCredential?.password}
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  disabled={isLoading}
+                  required
                 />
               </Grid>
+
+              {errorMessage && (
+                <Grid size={12} sx={{ mb: 2 }}>
+                  <Alert severity="error" variant="filled">
+                    {errorMessage}
+                  </Alert>
+                </Grid>
+              )}
+
               <Grid
                 sx={{
                   mb: 6,
@@ -127,12 +172,7 @@ const LoginForm = ({ defaultCredential }: LoginFormProps) => {
                   <FormControlLabel
                     control={<Checkbox name="checked" color="primary" size="small" />}
                     label={
-                      <Typography
-                        variant="subtitle2"
-                        sx={{
-                          color: 'text.secondary',
-                        }}
-                      >
+                      <Typography variant="subtitle2" sx={{ color: 'text.secondary' }}>
                         Remember this device
                       </Typography>
                     }
@@ -143,15 +183,23 @@ const LoginForm = ({ defaultCredential }: LoginFormProps) => {
                   </Link>
                 </Stack>
               </Grid>
+
               <Grid size={12}>
-                <Button fullWidth type="submit" size="large" variant="contained">
-                  Log in
+                <Button
+                  fullWidth
+                  type="submit"
+                  size="large"
+                  variant="contained"
+                  disabled={isLoading || !userId || !password}
+                >
+                  {isLoading ? 'Verifying Credentials...' : 'Login'}
                 </Button>
               </Grid>
             </Grid>
           </Box>
         </Grid>
       </Grid>
+
       <Link href="#!" variant="subtitle2">
         Trouble signing in?
       </Link>

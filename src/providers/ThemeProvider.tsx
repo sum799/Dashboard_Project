@@ -6,12 +6,15 @@ import { useSettingsContext } from './SettingsProvider';
 
 const ThemeProvider = ({ children }: PropsWithChildren) => {
   const {
-    config: { fontFamily },
+    config: { fontFamily, darkMode },
   } = useSettingsContext();
 
   const typography = useMemo(() => createTypography(fontFamily), [fontFamily]);
 
   const theme = createTheme({
+    palette: {
+      mode: darkMode ? 'dark' : 'light',
+    },
     typography,
     ...themeOverrides,
   });

@@ -8,7 +8,7 @@ import SimpleBar from 'components/base/SimpleBar';
 import NotificationList from 'components/sections/notification/NotificationList';
 import OutlinedBadge from 'components/styled/OutlinedBadge';
 
-const NotificationMenu = () => {
+const NotificationMenu = ({ disabled = false }: { disabled?: boolean }) => {
   const [notifications, setNotifications] = useState<DatewiseNotification>({
     today: [],
     older: [],
@@ -17,6 +17,7 @@ const NotificationMenu = () => {
 
   const open = Boolean(anchorEl);
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
+    if (disabled) return;
     setAnchorEl(event.currentTarget);
   };
   const handleClose = () => {
@@ -44,7 +45,17 @@ const NotificationMenu = () => {
 
   return (
     <>
-      <Button color="neutral" variant="soft" shape="circle" onClick={handleClick}>
+      <Button
+        color="neutral"
+        variant="soft"
+        shape="circle"
+        onClick={handleClick}
+        disabled={disabled}
+        sx={{
+          opacity: disabled ? 0.55 : 1,
+          cursor: disabled ? 'not-allowed' : 'pointer',
+        }}
+      >
         <OutlinedBadge
           variant="dot"
           color="error"
@@ -76,6 +87,20 @@ const NotificationMenu = () => {
         anchorOrigin={{
           horizontal: 'right',
           vertical: 'bottom',
+        }}
+        slotProps={{
+          paper: {
+            sx: {
+              width: 400,
+              height: 650,
+              display: 'flex',
+              flexDirection: 'column',
+              backgroundColor: 'background.paper',
+              border: '1px solid',
+              borderColor: 'divider',
+              boxShadow: '0 20px 40px rgba(0,0,0,0.12)',
+            },
+          },
         }}
         sx={{
           [`& .${paperClasses.root}`]: {

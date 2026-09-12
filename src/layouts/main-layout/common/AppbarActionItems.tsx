@@ -1,16 +1,16 @@
-import { ReactElement } from 'react';
 import { Stack, SxProps } from '@mui/material';
+import { getStoredAuthUser } from 'lib/googleAuth';
 import LanguageMenu from './LanguageMenu';
 import NotificationMenu from './NotificationMenu';
 import ProfileMenu from './ProfileMenu';
-import ThemeToggler from './ThemeToggler';
 
 interface AppbarActionItemsProps {
   sx?: SxProps;
-  searchComponent?: ReactElement;
 }
 
-const AppbarActionItems = ({ sx, searchComponent }: AppbarActionItemsProps) => {
+const AppbarActionItems = ({ sx }: AppbarActionItemsProps) => {
+  const isAuthenticated = !!getStoredAuthUser();
+
   return (
     <Stack
       className="action-items"
@@ -21,11 +21,9 @@ const AppbarActionItems = ({ sx, searchComponent }: AppbarActionItemsProps) => {
         ...sx,
       }}
     >
-      {searchComponent}
       <LanguageMenu />
-      <ThemeToggler />
-      <NotificationMenu />
-      <ProfileMenu />
+      <NotificationMenu disabled={!isAuthenticated} />
+      <ProfileMenu disabled={!isAuthenticated} />
     </Stack>
   );
 };

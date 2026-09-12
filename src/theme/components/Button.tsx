@@ -35,16 +35,26 @@ const btnColors: PaletteColorKey[] = [
 ];
 
 //Button soft variants
+const getPaletteColor = (theme: Theme, color: PaletteColorKey | undefined) => {
+  const paletteColor =
+    (color && theme.vars?.palette?.[color]) ||
+    (color && theme.palette?.[color]) ||
+    theme.palette.primary;
+
+  return paletteColor || theme.palette.primary;
+};
+
 const btnCustomVariants: ComponentsVariants['MuiButton'] = btnColors.map((color) => ({
   props: { variant: 'soft', color: color as ButtonProps['color'] },
   style: (style) => {
     const theme = style.theme as Theme;
+    const paletteColor = getPaletteColor(theme, color);
 
     return {
-      background: cssVarRgba(theme.vars.palette[color].mainChannel, 0.15),
-      color: theme.vars.palette[color].dark,
+      background: cssVarRgba(paletteColor.mainChannel || paletteColor.main, 0.15),
+      color: paletteColor.dark,
       '&:hover': {
-        background: cssVarRgba(theme.vars.palette[color].mainChannel, 0.2),
+        background: cssVarRgba(paletteColor.mainChannel || paletteColor.main, 0.2),
       },
     };
   },
@@ -73,14 +83,14 @@ shapes.forEach((shape) => {
 
 const outlineStyles = (theme: Theme) =>
   btnColors.reduce((acc: any, color) => {
-    const paletteColor = theme.vars.palette[color];
+    const paletteColor = getPaletteColor(theme, color);
 
     acc[
       `&.${buttonClasses.outlined}.${buttonClasses[`color${capitalize(color)}` as keyof ButtonClasses]}`
     ] = {
       '&:hover': {
-        backgroundColor: cssVarRgba(paletteColor.mainChannel, 0.12),
-        borderColor: cssVarRgba(paletteColor.mainChannel, 0.5),
+        backgroundColor: cssVarRgba(paletteColor.mainChannel || paletteColor.main, 0.12),
+        borderColor: cssVarRgba(paletteColor.mainChannel || paletteColor.main, 0.5),
       },
     };
 
@@ -89,13 +99,13 @@ const outlineStyles = (theme: Theme) =>
 
 const textBtnStyles = (theme: Theme) =>
   btnColors.reduce((acc: any, color) => {
-    const paletteColor = theme.vars.palette[color];
+    const paletteColor = getPaletteColor(theme, color);
 
     acc[
       `&.${buttonClasses.text}.${buttonClasses[`color${capitalize(color)}` as keyof ButtonClasses]}`
     ] = {
       '&:hover': {
-        backgroundColor: cssVarRgba(paletteColor.mainChannel, 0.12),
+        backgroundColor: cssVarRgba(paletteColor.mainChannel || paletteColor.main, 0.12),
       },
     };
 

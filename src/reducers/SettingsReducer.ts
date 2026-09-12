@@ -60,7 +60,7 @@ export const settingsReducer = (state: Config, action: ACTIONTYPE) => {
       return state;
   }
   Object.keys(updatedState).forEach((key) => {
-    if (['sidenavCollapsed', 'fontFamily'].includes(key)) {
+    if (['sidenavCollapsed', 'fontFamily', 'darkMode'].includes(key)) {
       setItemToStore(key, String(updatedState[key as keyof Config]));
     }
   });
