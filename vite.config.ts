@@ -28,6 +28,7 @@ export default ({ mode }) => {
       host: '0.0.0.0',
       port: Number(process.env.VITE_APP_PORT || 5005),
     },
-    base: process.env.NODE_ENV === 'production' ? process.env.VITE_BASENAME : '/',
+    // Keep Vercel deployment paths rooted at the site root.
+    base: process.env.VITE_BASE_PATH || '/',
   });
 };
