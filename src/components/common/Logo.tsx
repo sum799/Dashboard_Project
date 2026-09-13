@@ -1,4 +1,6 @@
 import { useEffect, useState } from 'react';
+// File header: `Logo` displays the SumK9 brand mark and links to the root
+// path. Keep this component lightweight and avoid heavy dependencies.
 import { Link, SvgIcon, SvgIconProps, Typography, typographyClasses } from '@mui/material';
 import { rootPaths } from 'routes/paths';
 

@@ -1,3 +1,5 @@
+// File header: `SectionHeader` is a small presentational component used to
+// add consistent headings for page sections (title and optional subtitle).
 import { ReactElement, isValidElement } from 'react';
 import { Stack, StackOwnProps, Typography } from '@mui/material';
 

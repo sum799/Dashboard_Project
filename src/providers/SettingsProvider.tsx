@@ -22,9 +22,9 @@ interface SettingsContextInterFace {
 export const SettingsContext = createContext({} as SettingsContextInterFace);
 
 const SettingsProvider = ({ children }: PropsWithChildren) => {
-// File header: SettingsProvider stores global configuration (font family,
-// appearance options) and exposes a `useSettingsContext` hook for components
-// to read/update settings. Changing defaults here affects the whole app.
+  // File header: SettingsProvider stores global configuration (font family,
+  // appearance options) and exposes a `useSettingsContext` hook for components
+  // to read/update settings. Changing defaults here affects the whole app.
   const configState: Config = {
     ...initialConfig,
     sidenavCollapsed: getItemFromStore('sidenavCollapsed', initialConfig.sidenavCollapsed),
