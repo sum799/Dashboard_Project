@@ -1,3 +1,5 @@
+// File header: `TableLabelDisplayedRows` renders the "Showing X-Y out of Z"
+// label used in table pagination controls.
 import { Box, Typography } from '@mui/material';
 
 interface TableLabelDisplayedRowsProps {

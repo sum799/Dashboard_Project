@@ -1,3 +1,5 @@
+// File header: `PageLoader` centers a dual-ring progress indicator used when
+// pages are loading. Keep this purely presentational and avoid side-effects.
 import { Box, CircularProgress, Stack, StackOwnProps } from '@mui/material';
 import { cssVarRgba } from 'lib/utils';
 

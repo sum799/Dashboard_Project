@@ -1,3 +1,6 @@
+// File header: `DataGridPaginationAction` bridges the DataGrid API with the
+// app's custom pagination controls, mapping DataGrid events to the
+// `CustomTablePaginationAction` callbacks.
 import { useMemo } from 'react';
 import { useGridApiContext, useGridRootProps } from '@mui/x-data-grid';
 import CustomTablePaginationAction, {

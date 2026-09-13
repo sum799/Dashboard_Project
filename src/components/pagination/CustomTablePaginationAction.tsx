@@ -1,3 +1,6 @@
+// File header: `CustomTablePaginationAction` provides customized table
+// pagination controls used across table views. It abstracts responsive
+// behavior and exposes callbacks for previous/next/show-all actions.
 import { MouseEvent, useMemo } from 'react';
 import {
   Box,

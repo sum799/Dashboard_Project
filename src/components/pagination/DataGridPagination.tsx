@@ -1,3 +1,6 @@
+// File header: `DataGridPagination` adapts MUI `TablePagination` for the
+// app's DataGrid usage. It wires the table pagination callbacks and uses
+// `DataGridPaginationAction` to render actions.
 import { ChangeEvent } from 'react';
 import { TablePagination, useEventCallback } from '@mui/material';
 import { GridSlotProps } from '@mui/x-data-grid';
