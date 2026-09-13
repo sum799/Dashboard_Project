@@ -11,6 +11,8 @@ const AuthLayout = ({ children }: PropsWithChildren) => {
     <Grid
       container
       sx={{
+        backgroundColor: 'background.paper',
+        color: 'text.primary',
         height: { md: '100vh' },
         minHeight: '100vh',
         flexDirection: {
