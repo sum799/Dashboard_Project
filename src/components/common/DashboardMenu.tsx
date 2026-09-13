@@ -1,3 +1,6 @@
+// File header: `DashboardMenu` renders navigation/menu items for the
+// dashboard side navigation. Keep interactions stateless where possible and
+// avoid coupling to global routing logic.
 import { JSX, MouseEvent, useState } from 'react';
 import {
   Button,

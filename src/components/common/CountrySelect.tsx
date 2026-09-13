@@ -1,3 +1,6 @@
+// File header: `CountrySelect` renders an Autocomplete for country
+// selection. It exposes `fields` to toggle which parts (flag, name, phone,
+// code) to display in options.
 import {
   Autocomplete,
   AutocompleteProps,

@@ -1,3 +1,6 @@
+// File header: `PasswordTextField` is a small wrapper around MUI `TextField`
+// that provides a visibility toggle for password inputs. Keep logic minimal
+// and avoid storing the password in any higher-level state.
 import { SyntheticEvent, useState } from 'react';
 import { IconButton, InputAdornment, TextField, TextFieldProps } from '@mui/material';
 import IconifyIcon from 'components/base/IconifyIcon';
