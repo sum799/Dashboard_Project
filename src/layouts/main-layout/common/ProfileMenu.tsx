@@ -1,3 +1,6 @@
+// File header: Profile menu and avatar dropdown. Handles account actions like
+// opening profile, signing out, and controlling menu state. It is rendered in
+// the AppBar and must remain lightweight to avoid blocking the header.
 import { PropsWithChildren, SyntheticEvent, useEffect, useMemo, useState } from 'react';
 import {
   Box,
@@ -22,6 +25,7 @@ import paths from 'routes/paths';
 import IconifyIcon from 'components/base/IconifyIcon';
 import StatusAvatar from 'components/base/StatusAvatar';
 import ProSnackbar from './ProSnackbar';
+import UserProfileDialog from './UserProfileDialog';
 
 interface ProfileMenuItemProps extends MenuItemProps {
   icon: string;
@@ -77,6 +81,45 @@ const ProfileMenu = ({ disabled = false }: { disabled?: boolean }) => {
     }
   };
 
+  const [profileOpen, setProfileOpen] = useState(false);
+  const [profileLoading, setProfileLoading] = useState(false);
+  const [profileError, setProfileError] = useState<string | null>(null);
+  const [profileData, setProfileData] = useState<Record<string, any> | null>(null);
+
+  const handleOpenProfile = async () => {
+    handleClose();
+    setProfileLoading(true);
+    setProfileError(null);
+    setProfileData(null);
+
+    const stored = getStoredAuthUser();
+    const userId = String(stored?.User_ID ?? stored?.name ?? stored?.email ?? '');
+
+    try {
+      const response = await fetch(
+        'https://script.google.com/macros/s/AKfycbw_duSZjS-6MaZ4R8YTeN-_He-Xs7Od_Rnn2b9jvqXSfzglqMyFlAugkjM5kARtpz0m/exec',
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'text/plain' },
+          body: JSON.stringify({ API_Key: '123456789', User_ID: userId }),
+        },
+      );
+
+      const result = await response.json();
+
+      if (result?.status === 'success') {
+        setProfileData(result.data ?? null);
+      } else {
+        setProfileError(result?.message ?? 'Failed to fetch profile');
+      }
+    } catch (err: any) {
+      setProfileError(err?.message ?? String(err));
+    } finally {
+      setProfileLoading(false);
+      setProfileOpen(true);
+    }
+  };
+
   const menuButton = (
     <Button
       color="neutral"
@@ -124,7 +167,7 @@ const ProfileMenu = ({ disabled = false }: { disabled?: boolean }) => {
               backgroundColor: 'background.paper',
               border: '1px solid',
               borderColor: 'divider',
-              boxShadow: '0 20px 40px rgba(0,0,0,0.12)',
+              boxShadow: '0 20px 40px rgba(187, 216, 107, 0.12)',
             },
           },
         }}
@@ -192,7 +235,7 @@ const ProfileMenu = ({ disabled = false }: { disabled?: boolean }) => {
         <Box sx={{ py: 1 }}>
           <ProfileMenuItem
             icon="material-symbols:manage-accounts-outline-rounded"
-            onClick={handleClose}
+            onClick={handleOpenProfile}
             href="#!"
             disabled={disabled}
           >
@@ -221,6 +264,13 @@ const ProfileMenu = ({ disabled = false }: { disabled?: boolean }) => {
         </Box>
       </Menu>
       <ProSnackbar open={snackbarOpen} onClose={handleSnackbarClose} />
+      <UserProfileDialog
+        open={profileOpen}
+        onClose={() => setProfileOpen(false)}
+        loading={profileLoading}
+        error={profileError}
+        data={profileData}
+      />
     </>
   );
 };

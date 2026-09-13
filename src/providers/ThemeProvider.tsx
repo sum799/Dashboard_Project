@@ -4,6 +4,9 @@ import { themeOverrides } from 'theme/theme';
 import createTypography from 'theme/typography';
 import { useSettingsContext } from './SettingsProvider';
 
+// File header: ThemeProvider sets up Material UI theme, typography, and global
+// CSS baseline. It forces the app into a consistent visual style and exposes
+// theme variables used across components.
 const ThemeProvider = ({ children }: PropsWithChildren) => {
   const {
     config: { fontFamily },

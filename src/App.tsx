@@ -1,3 +1,7 @@
+// File header: App shell — controls global app behaviors such as the auth preview
+// gate, global layout outlets, and startup side-effects. It renders the route
+// `Outlet` and places UI overlays (e.g., the sign-in preview) when the user is
+// not authenticated.
 import { useEffect, useLayoutEffect } from 'react';
 import { Outlet, useLocation, useNavigate } from 'react-router';
 import { Box, Button, Stack, Typography } from '@mui/material';

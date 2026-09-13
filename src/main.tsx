@@ -1,3 +1,7 @@
+// File header: This file bootstraps the React application. It mounts the top-level
+// App component into the DOM and wraps it with providers such as ThemeProvider
+// and SettingsProvider which configure global behavior (theme, settings, etc.).
+// Edit with care — changes affect startup and global context.
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { RouterProvider } from 'react-router';

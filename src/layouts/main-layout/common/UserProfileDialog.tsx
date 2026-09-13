@@ -1,3 +1,6 @@
+// File header: Account Settings dialog. Presents user profile data fetched from
+// the backend and provides a focused UI for viewing account fields. Styles are
+// chosen to keep the header visible while the rest of the page is blurred.
 import React from 'react';
 import {
   Box,

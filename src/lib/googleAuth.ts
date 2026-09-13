@@ -1,3 +1,6 @@
+// File header: Authentication storage helpers. Provides a small wrapper around
+// `localStorage` for storing and validating the authenticated user session.
+// It centralizes keys, session expiry, and small utilities used by auth flows.
 export const AUTH_USER_KEY = 'sumk9_google_user';
 export const AUTH_SESSION_TIMEOUT_MS = 30 * 60 * 1000;
 export const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID || '';

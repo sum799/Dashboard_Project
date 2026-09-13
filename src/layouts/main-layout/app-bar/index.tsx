@@ -3,6 +3,9 @@ import { useNavigate } from 'react-router';
 import { Box, Button, Stack, Typography, paperClasses } from '@mui/material';
 import MuiAppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
+// File header: App bar component. Contains the top header, logo, timer, and
+// action items (notifications, profile). Keep this component performant — it's
+// always mounted and re-renders frequently when app-level state changes.
 import { getStoredAuthUser } from 'lib/googleAuth';
 import paths from 'routes/paths';
 import IconifyIcon from 'components/base/IconifyIcon';

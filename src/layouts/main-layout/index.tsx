@@ -2,6 +2,9 @@ import { PropsWithChildren } from 'react';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
 import AppBar from 'layouts/main-layout/app-bar';
+// File header: Main layout — arranges the app shell including AppBar, Footer,
+// and main content area. Controls layout-level wrappers and should be used by
+// the route structure to present consistent scaffolding.
 import Footer from './footer';
 
 const MainLayout = ({ children }: PropsWithChildren) => {

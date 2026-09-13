@@ -4,6 +4,9 @@ import keyFrames from 'theme/styles/keyFrames';
 import popper from 'theme/styles/popper';
 import simplebar from 'theme/styles/simplebar';
 
+// File header: Global CSS baseline and style overrides. Central place to
+// enforce global CSS rules such as scrollbars, body background, and utility
+// resets applied across the application.
 const CssBaseline: Components<Omit<Theme, 'components'>>['MuiCssBaseline'] = {
   defaultProps: {},
   styleOverrides: (theme) => ({
