@@ -6,14 +6,23 @@ import { useSettingsContext } from './SettingsProvider';
 
 const ThemeProvider = ({ children }: PropsWithChildren) => {
   const {
-    config: { fontFamily, darkMode },
+    config: { fontFamily },
   } = useSettingsContext();
 
   const typography = useMemo(() => createTypography(fontFamily), [fontFamily]);
 
   const theme = createTheme({
     palette: {
-      mode: darkMode ? 'dark' : 'light',
+      // Force light mode and white backgrounds regardless of browser or OS dark mode
+      mode: 'light',
+      background: {
+        default: '#ffffff',
+        paper: '#ffffff',
+      },
+      text: {
+        primary: '#000000',
+        secondary: '#333333',
+      },
     },
     typography,
     ...themeOverrides,
