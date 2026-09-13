@@ -1,3 +1,5 @@
+// File header: `useSettingsPanelMountEffect` runs a provided effect when the
+// settings panel mounts. Useful for initialising panel-related state.
 import { useEffect } from 'react';
 import { Config } from 'config';
 import { SettingsPanelConfig, useSettingsPanelContext } from 'providers/SettingsPanelProvider';

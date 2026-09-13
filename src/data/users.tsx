@@ -1,3 +1,5 @@
+// File header: Demo user dataset used by profile components and placeholders
+// during development. Replace with real API-driven data in production.
 import { initialConfig } from 'config';
 import { User } from 'types/users';
 

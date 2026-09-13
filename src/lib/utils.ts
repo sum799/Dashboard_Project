@@ -1,3 +1,6 @@
+// File header: General utility functions used across the app (formatting,
+// palette helpers, etc.). Keep utilities small and well-tested — they are
+// widely reused.
 export const getItemFromStore = (
   key: string,
   defaultValue?: string | boolean,

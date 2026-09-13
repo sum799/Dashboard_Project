@@ -1,4 +1,6 @@
 import { useId } from 'react';
+// File header: `IconifyIcon` is a small wrapper around `@iconify/react` to
+// standardize icon rendering across the app (size, color props).
 import { Icon, IconProps } from '@iconify/react';
 import Box from '@mui/material/Box';
 import { SxProps, Theme } from '@mui/material/styles';

@@ -1,3 +1,6 @@
+// File header: AccountsProvider wraps account-related state (current user,
+// account list, and helpers). Use this provider where account data must be
+// available to many components.
 import { PropsWithChildren, createContext, use } from 'react';
 import { personalInfoData } from 'data/account/personal-info';
 import { PersonalInfo } from 'types/accounts';

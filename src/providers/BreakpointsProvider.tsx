@@ -1,3 +1,6 @@
+// File header: BreakpointsProvider exposes responsive breakpoint state to the
+// app so components can adapt layout programmatically instead of relying
+// solely on CSS media queries.
 import { PropsWithChildren, createContext, use, useEffect, useState } from 'react';
 import { Breakpoint, Theme } from '@mui/material';
 import { useMediaQuery } from '@mui/material';

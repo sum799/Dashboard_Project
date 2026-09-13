@@ -1,3 +1,5 @@
+// File header: SettingsPanelProvider manages the open/close state of the
+// floating settings panel and exposes a small context to toggle visibility.
 import { PropsWithChildren, createContext, use, useState } from 'react';
 
 export interface SettingsPanelConfig {

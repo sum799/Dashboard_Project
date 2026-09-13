@@ -1,3 +1,5 @@
+// File header: `useToggleChartLegends` provides state and helpers to toggle
+// chart legend visibility across chart components.
 import { RefObject, useCallback, useState } from 'react';
 import EChartsReactCore from 'echarts-for-react/lib/core';
 

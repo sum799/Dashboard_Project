@@ -1,3 +1,5 @@
+// File header: Router registry — declares the app routes and which layout
+// each route uses. This is the canonical routing configuration for the app.
 import { Suspense, lazy } from 'react';
 import { Outlet, RouteObject, createBrowserRouter, useLocation } from 'react-router';
 import App from 'App';

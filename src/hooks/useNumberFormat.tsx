@@ -1,3 +1,5 @@
+// File header: `useNumberFormat` is a small utility hook that provides
+// locale-aware number formatting used in KPI and numeric displays.
 import { currencyFormat, getCurrencySymbol, numberFormat } from 'lib/utils';
 
 const useNumberFormat = () => {
